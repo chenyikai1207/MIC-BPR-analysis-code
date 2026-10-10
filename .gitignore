@@ -1,0 +1,27 @@
+# Local inputs, outputs and environment state are never part of this code repository.
+__pycache__/
+*.py[cod]
+.venv*/
+.env*
+data/
+source_data/
+outputs/
+results/
+private/
+LOCAL_ONLY_QA/
+*.csv
+*.tsv
+*.npz
+*.npy
+*.mat
+*.set
+*.fdt
+*.pkl
+*.pickle
+*.zip
+*.pdf
+*.docx
+*.png
+*.svg
+*.tif
+*.tiff

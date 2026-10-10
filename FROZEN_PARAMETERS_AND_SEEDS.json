@@ -1,0 +1,83 @@
+{
+  "Python_actual_analysis": "3.12.14",
+  "current_MEG": {
+    "sources": 35,
+    "targets": 35,
+    "source_role": "Frozen pre-E1 alternating sorted70cohort roles; semantic0012excluded; retain original source/target order",
+    "native_Hz": 100,
+    "channels": 306,
+    "P_window_seconds": [
+      0,
+      2
+    ],
+    "I_window_seconds": [
+      2,
+      4
+    ],
+    "resample_poly": [
+      2,
+      5
+    ],
+    "feature_shape": [
+      306,
+      80
+    ],
+    "source_joint_standard_scaler": true,
+    "source_PCA_variance": 0.95,
+    "B4_width": 16,
+    "B4_true_melody_columns": 1,
+    "B4_paired_common_columns": 15,
+    "ridge": 0.01,
+    "centroid_agreement_penalty": 0.1,
+    "readout": "LDA lsqr shrinkage auto empirical priors",
+    "PCA16": "First16 of same sourcePCA95; no B4 map",
+    "null_draws": 199,
+    "recall_bootstrap": {
+      "draws": 9999,
+      "PCG64_seed": 20261028
+    },
+    "manipulation_bootstrap": {
+      "draws": 9999,
+      "PCG64_seed": 20261030
+    },
+    "source_delete_one": "All35complete source deletions and refits; variance34/35 centered deletion sum; add fixed-target mean variance; t34 approximate sensitivity",
+    "correspondence": "Within melody/task/pausehalf; linear_sum_assignment nearest/farthest nonself bijection; evaluate fixed predictions",
+    "correspondence_source_uncertainty": "fiveequal7source groups, variance4/5 centered sum, t4; separate from whole35source deletion",
+    "recall_label_generator": "PCG64 default_rng20261019; one stream in fixed target/draw order; original label multiset permutations",
+    "manipulation_label_generator": "PCG64 Generator seed20261029; one stream in fixed recall-target order, 199 permutations per manipulation target",
+    "donor_timing": "Original behavior log onset seconds; not native sample indices or an inferred session clock"
+  },
+  "external_EEG": {
+    "people": 12,
+    "sessions": 15,
+    "source_labels": "True flower/penguin/guitar categories",
+    "target_MC_draws": 199,
+    "generator": "PCG64 SeedSequence([20261032, numeric public participant ID])",
+    "allocation": "floor(n/3) each code, uniformly selected remainder codes, shuffled multiset within person/session/trueclass; P/I same code",
+    "donor": "same trueclass and code; same session/pitch then same session, nearest native P onset then rowindex; all realized donors same session",
+    "feature_function": "external_core.phase_local_v2: own-window line/trend regression; resample_poly5/128, padtype line",
+    "native_Hz": 1024,
+    "window_seconds": 2,
+    "EEG_channels": 124,
+    "source_PCA_variance": 0.95,
+    "B4_width": 16,
+    "B4_Helmert_columns": 2,
+    "B4_paired_common_columns": 14,
+    "ridge": 0.01,
+    "centroid_agreement_penalty": 0.1,
+    "LOPO": "Exclude all target-person sessions; source11main/source10outer; sorted sourceIDs and allPthenallI",
+    "weights": "Macro class within session; sessions within person equal;199draws equal;12people equal",
+    "inference": "Wholeperson delete-refit variance11/12 centered sum and t11 approximate interval",
+    "unique_source_sets": 78,
+    "target_contexts": 144,
+    "resources": {
+      "CPU_threads": 2,
+      "RAM_GiB": 4,
+      "scratch_bytes": 8000000000,
+      "source_seconds": 3600,
+      "total_model_seconds": 9000
+    },
+    "limitations": "MC is not independent people/permutation null; approximate interval not exact coverage or equivalence"
+  },
+  "historical_strict": "D1/D6/listener-origin spatialPCA16, 100ms means and4coordinate rotation; not current joint flattenedPCA/B4"
+}

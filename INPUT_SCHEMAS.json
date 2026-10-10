@@ -1,0 +1,208 @@
+{
+  "format": "Input field definitions only. No participant instances, estimates, or result tables are included.",
+  "file_format": "NPZ arrays with allow_pickle=False, numeric or Unicode/bytes string arrays, no object dtype. Local files outside candidate.",
+  "feature_packet": {
+    "P": "N x D finite floats; MEG D=24480, EEG D=9920",
+    "I": "N x D finite floats, exactly matching original pair rows in P",
+    "y": "N integers: MEG physical label 0/1; EEG flower/penguin/guitar 0/1/2",
+    "original_uid": "N unique original-pair strings, frozen order, globally unique across source/target",
+    "owner": "N strings giving original person membership, no alternate relabeling",
+    "EEG_extra": {
+      "session": "N frozen strings",
+      "pitch": "N native pitch strings",
+      "P_onset_sample": "N native integer sample indices at 1024Hz"
+    },
+    "MEG_target_extra": {
+      "pause_halfblock": "N 0/1 original semantic pause-half assignments",
+      "onset_log_sec": "N finite floating-point original behavior log onset seconds used by actual donor and correspondence producers"
+    },
+    "ordering": "Source rows grouped in frozen person order; EEG people sorted. Target EEG has all person sessions, sorted frozen session order then original pair order. Do not reorder from outcomes."
+  },
+  "assignment_packet": {
+    "labels": "200 x N int, first row true, remaining 199 frozen draws",
+    "donor": "200 x N nonself row index with same supervision label",
+    "original_uid": "exact equality and order with feature packet",
+    "MEG_manipulation_evaluation_labels": "200 x N; first row 1-labels[0], remaining rows labels[1:]",
+    "EEG_rules": "seed PCG64 SeedSequence([20261032, numeric public ID]); balanced person/session/truecategory codes; all realized donors within session; original fixed draw order",
+    "MEG_rules": "Recall PCG64 seed20261019; manipulation PCG64 seed20261029; one stream across frozen target order, not independently reset per person. Same fixed draws across representations and source deletions."
+  },
+  "source_model": "Produced by fit-source; scaler/PCA/B4 arrays plus source_ids, source_original_uids, modality. Never construct from fitted target information.",
+  "EEG_whole_person_inference": {
+    "person_order": "12 sorted frozen public IDs",
+    "primary_fraction": "shape [12], main source11 result per target",
+    "outer_delete_fraction": "shape [12,12], row deleted person, column target; NaN diagonal, finite off-diagonal full source10 refits; not PP units"
+  },
+  "MEG_correspondence_API": {
+    "y": "[N] true binary labels",
+    "null": "[199,N] frozen random labels",
+    "realpred": "[N,2] boolean true full-N predictions B4/PCA16",
+    "pred": "[199,N,2] frozen boolean null full-N predictions",
+    "near": "[N] same-trueclass/pausehalf minimum-time nonself bijection",
+    "far": "[N] corresponding maximum-time bijection",
+    "entry": "analysis_adapters.score_meg_correspondence",
+    "timing_for_mismatch": "Original log onset seconds as floating-point costs; retain historical units and tie ordering"
+  },
+  "external_plot_local_root": {
+    "source_data/EXTERNAL_PRIMARY_PERSON_ESTIMATES.csv": {
+      "rows": "one row per target person, shape required by fixed plot",
+      "fields": [
+        "person",
+        "primary199_DoD_pp",
+        "B4_primary199_inclusion_pp",
+        "PCA16_primary199_inclusion_pp"
+      ]
+    },
+    "source_data/EXTERNAL_WHOLEPERSON_DELETION_ESTIMATES.csv": {
+      "rows": "one row per whole-person deletion",
+      "fields": [
+        "deleted_person",
+        "wholeperson_delete_refit_mean_pp"
+      ]
+    },
+    "source_data/FINAL15_PERSON_SESSION_COUNTS.csv": {
+      "rows": "one row per admitted person/session",
+      "fields": [
+        "person",
+        "session",
+        "flower",
+        "penguin",
+        "guitar"
+      ]
+    },
+    "FINAL_SCIENTIFIC_RESULTS_AUDIT.json or qa/FINAL_SCIENTIFIC_RESULTS_AUDIT.json": {
+      "fields": [
+        "status starting PASS",
+        "primary_mean_pp",
+        "approximate_95_interval_pp [low,high]"
+      ],
+      "meaning": "Independently audited matching outcomes, not an invented PASS marker"
+    }
+  },
+  "historical_dictionary_inputs": {
+    "D1_people[person]": {
+      "P,I,MI": "[N,306,20] historical 100ms mean time bins (MI may have different N)",
+      "y,my": "physical binary label arrays; manipulation intended=1-my",
+      "uids,muids": "original-trial identifiers aligned to each task",
+      "cal,src,test": "frozen integer index arrays; source320 balanced originals from10 eligible sources",
+      "eligible": "pre-frozen source eligibility boolean"
+    },
+    "D6_people[person]": "D1 dictionary plus pool indices; counts10/20, calibration2/4 per class, disjoint pool vs paired test; original selection from historical core retained",
+    "listener_origin_people[person]": "Task dicts IMAGERY_RECALL and IMAGERY_MANIPULATION with P,I,y,uid; available[task], test[task], cal indices. budget object has check() and fits counter."
+  },
+  "external_group_csv_inputs_not_bundled": [
+    {
+      "file": "source_data/EXTERNAL_MC199_INTEGRATION.csv",
+      "fields": [
+        "MC_draw_index",
+        "equal12person_equal_session_mean_DoD_pp",
+        "independent_people",
+        "inferential_sample_size_is199"
+      ]
+    },
+    {
+      "file": "source_data/Figure2_correspondence_contrasts.csv",
+      "fields": [
+        "endpoint",
+        "mean_BA",
+        "conditional_ci95_low",
+        "conditional_ci95_high",
+        "source_target_approx_ci95_low",
+        "source_target_approx_ci95_high"
+      ]
+    },
+    {
+      "file": "source_data/Figure2_full_calibration.csv",
+      "fields": [
+        "evaluation_mode",
+        "readout",
+        "mean_BA",
+        "conditional_ci95_low",
+        "conditional_ci95_high",
+        "target_N"
+      ]
+    },
+    {
+      "file": "source_data/Figure2_label_specificity.csv",
+      "fields": [
+        "endpoint",
+        "mean_BA",
+        "conditional_ci95_low",
+        "conditional_ci95_high",
+        "source_target_approx_ci95_low",
+        "source_target_approx_ci95_high"
+      ]
+    },
+    {
+      "file": "source_data/Figure2_within_stratum.csv",
+      "fields": [
+        "mode",
+        "readout",
+        "mean_BA",
+        "conditional_ci95_low",
+        "conditional_ci95_high",
+        "target_N"
+      ]
+    },
+    {
+      "file": "source_data/Figure3_manipulation_input_contrasts.csv",
+      "fields": [
+        "endpoint",
+        "mean_BA_difference",
+        "conditional_target_cluster95low",
+        "conditional_target_cluster95high",
+        "target_N",
+        "existing_source_group_delete_min",
+        "existing_source_group_delete_max",
+        "arbitrary_labels_mean_within_target_first"
+      ]
+    },
+    {
+      "file": "source_data/Figure3_recall_input_contrasts.csv",
+      "fields": [
+        "endpoint",
+        "mean_BA_difference",
+        "target_cluster_bootstrap_ci95_low",
+        "target_cluster_bootstrap_ci95_high",
+        "descriptive_centered_two_sided_bootstrap_p",
+        "target_N",
+        "random_assignments_mean_within_target_first",
+        "source_fit_fixed",
+        "delete7source_case_min",
+        "delete7source_case_max",
+        "approx_grouped_source_variance"
+      ]
+    },
+    {
+      "file": "source_data/Figure3_source_sensitivity.csv",
+      "fields": [
+        "endpoint",
+        "full35_source_estimate",
+        "delete34_source_mean",
+        "delete_min",
+        "delete_max",
+        "classic_source_delete_one_variance_approx",
+        "classic_source_SE_approx",
+        "conditional_target_variance",
+        "source_plus_target_approx95low",
+        "source_plus_target_approx95high",
+        "interval_status",
+        "source_N",
+        "target_N",
+        "source_deletions"
+      ]
+    },
+    {
+      "file": "source_data/FigureS1_strict_predictions.csv",
+      "fields": [
+        "label",
+        "mean_pp",
+        "conditional95low",
+        "conditional95high",
+        "source_approx95low",
+        "source_approx95high",
+        "N",
+        "original_source"
+      ]
+    }
+  ]
+}
