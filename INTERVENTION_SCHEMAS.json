@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mic:intervention-input-qualification",
+  "title": "MIC intervention qualification and NPZ contracts",
+  "description": "JSON validates qualification metadata; x-npz-contracts describes NPZ arrays checked by the CLI. No data instances are included.",
+  "type": "object",
+  "required": ["status", "modality", "scope", "snapshot_identity_verified", "eligibility_verified", "event_uid_row_order_verified", "feature_contract_verified", "frozen_roles_verified", "local_qualification_evidence"],
+  "properties": {
+    "status": {"enum": ["QUALIFIED_LOCALLY", "INCOMPLETE_EXAMPLE_DO_NOT_USE_FOR_SCORING"]},
+    "modality": {"const": "MEG"},
+    "scope": {"enum": ["USER_SUPPLIED_ADMITTED_DATA", "SYNTHETIC_TEST_ONLY"]},
+    "snapshot_identity_verified": {"type": "boolean"},
+    "data_access_legal_and_license_verified": {"type": "boolean"},
+    "eligibility_verified": {"type": "boolean"},
+    "event_uid_row_order_verified": {"type": "boolean"},
+    "feature_contract_verified": {"type": "boolean"},
+    "frozen_roles_verified": {"type": "boolean"},
+    "complete_source_refits_verified": {"type": "boolean"},
+    "same_target_support_verified": {"type": "boolean"},
+    "source_LOPO_exclusion_verified": {"type": "boolean"},
+    "local_qualification_evidence": {"type": "string"},
+    "instructions": {"type": "string"}
+  },
+  "additionalProperties": false,
+  "x-npz-contracts": {
+    "conventions": {
+      "N": "one person's trials, at most500; source fitting uses all source rows",
+      "Q": "199 frozen arbitrary codebooks for real factorials; smaller synthetic fixtures allowed",
+      "R": "one B4 readout or two ordered B4,PCA16 readouts",
+      "T": "35 ordered target people for real summaries",
+      "S": "35 complete source-person deletions for real sensitivity",
+      "F": "24480 qualified flattened MEG phase features",
+      "objects": "Object/pickle NPZ fields prohibited; all IDs/UIDs use non-object Unicode/byte string arrays",
+      "units": "BA is a proportion; all contrasts and sensitivity inputs are percentage points",
+      "bootstrap": "Frozen supplied integer [9999,T] resample indices; code rows are not statistical units"
+    },
+    "phase_features": {
+      "P": "finite float [N,F]",
+      "I": "finite float [N,F], paired and same original row order",
+      "y": "integer [N], true heard class0/1; both classes",
+      "original_uid": "unique string [N]",
+      "owner": "string [N], one target or grouped source people",
+      "pause_halfblock": "integer [N],0/1; required for factorial matching",
+      "onset_log_sec": "finite float [N], original behavior-log onset seconds; required for factorial matching",
+      "evaluation_y": "integer [N], required for reversal, exactly1-y"
+    },
+    "source_model": {
+      "fields": "Existing INPUT_SCHEMAS.json complete MEG source model; scaler_mean/scaler_scale/pca_mean/pca_components/p_mean/i_mean/B4_P_weights/B4_I_weights/source_ids/source_original_uids/modality",
+      "modality": "scalar string MEG",
+      "source_rows": "All allowed P/I rows; target/heldout person and UID sets disjoint from fitted source model",
+      "refit_source": "refit-source removes the specified entire person from full35; retains34 and refits every source numerical stage"
+    },
+    "frozen_codes": {
+      "labels": "integer [Q,N],0/1; frozen true-label class multiset per code",
+      "original_uid": "string [N], identical ordered target UIDs",
+      "original_donor": "optional integer [Q,N]; if supplied must equal strict nearest donor on eligible common support"
+    },
+    "factorial_plan": {
+      "labels": "original integer [Q,N], never modified for scoring",
+      "k": "integer [Q,N], strict same-code nearest nonself donor, -1 if unsupported",
+      "l": "integer [Q,N], shared strict opposite-code nearest partner, -1 if unsupported",
+      "eligible": "Boolean [Q,N], supports both k and l",
+      "reason_code": "integer [Q,N]:0 eligible,1 no strict same-code donor,2 no strict opposite-code partner; reason1 has priority",
+      "original_uid": "ordered string [N]",
+      "original_true_labels": "integer [N], same as inputy",
+      "pause_halfblock": "same ordered half metadata as input",
+      "onset_log_sec": "same original log seconds as input"
+    },
+    "factorial_score_output": {
+      "decision_evidence": "float [Q,N,R,4], eligible finite; unsupported NaN",
+      "arm_order": "OWN_C,OTHER_C,OWN_X,OTHER_X",
+      "readout_order": "B4 or B4,PCA16",
+      "per_code_BA": "float [Q,R,4], class-balanced on identical eligible support",
+      "labels": "original scoring codes, integer [Q,N]",
+      "eligible": "Boolean [Q,N]",
+      "original_uid": "ordered target UIDs",
+      "endpoint_names": "string [M]",
+      "endpoint_values": "float [M], BA proportions or named pp contrasts",
+      "scope": "scalar data scope string; all generated fixtures SYNTHETIC_TEST_ONLY"
+    },
+    "factorial_summary_input": {
+      "person_order": "unique string [T], original frozen person order",
+      "per_person_code_BA": "finite proportion [T,Q,R,4], identical code/readout/arm ordering",
+      "participant_row_resamples": "frozen integer [9999,T], each row samples all T people with replacement",
+      "readout_order": "B4 or B4,PCA16"
+    },
+    "source_sensitivity_input": {
+      "source_order": "unique string [S], one actual whole-source deletion per row, all reported",
+      "target_order": "unique string [T], same full-source/deletion target order; disjoint from source_order",
+      "full_person_contrasts_pp": "finite float [T]",
+      "deleted_source_person_contrasts_pp": "finite float [S,T] from complete refits, same support/codebooks",
+      "paired_alternative": "Instead of the two contrast arrays, supply full_endpoint_pairs_pp [T,2] and deleted_endpoint_pairs_pp [S,T,2]; endpoint0 minus endpoint1 before sensitivity calculation",
+      "qualification": "complete_source_refits_verified and same_target_support_verified must be true"
+    },
+    "source_direction_prior_output": {
+      "source_delta": "finite float [16], equal-person true-class P difference through corresponding model",
+      "source_ids": "ordered source model IDs",
+      "source_original_uids": "source model UIDs",
+      "model_reference": "scalar local model path, runtime-only outside public repository",
+      "model_bytes": "integer local byte length",
+      "model_mtime_ns": "integer local modification time; metadata binding is not historical identity proof"
+    },
+    "source_selection_input": {
+      "source_person_order": "unique string [35], source-heldout folds only",
+      "source_person_BA": "finite proportion [35,5], equal-person LOPO with held person excluded from scaler/PCA/B4/prior",
+      "lambda_grid": "exact float [0,.25,.5,.75,1]",
+      "qualification": "source_LOPO_exclusion_verified must be true; no target scores used"
+    },
+    "frozen_selection_json": {
+      "selection_frozen": "true; write before target scoring",
+      "chosen_lambda": "one of0,.25,.5,.75,1; tie within1e-12 takes smaller weight",
+      "target_scores_used": "0",
+      "data_scope": "USER_SUPPLIED_ADMITTED_DATA or SYNTHETIC_TEST_ONLY; must match target scope",
+      "scope": "exploratory source-only selection; historical exposure remains"
+    },
+    "direction_score_output": {
+      "decision_evidence": "finite float [N,4], true-target evaluation",
+      "method_order": "ORIGINAL_LDA,DIAGONAL_LDA,PURE_SOURCE_DIRECTION,SOURCE_ANCHORED_LDA",
+      "method_BA": "proportion [4], equal class weighting for this person",
+      "training_true_labels": "original heard integer [N]",
+      "evaluation_true_labels": "recall:y; reversal:1-y, never fitted",
+      "original_uid": "ordered target UIDs",
+      "chosen_lambda": "frozen scalar weight",
+      "scope": "scalar data scope"
+    }
+  }
+}

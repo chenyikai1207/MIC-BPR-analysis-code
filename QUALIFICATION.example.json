@@ -7,5 +7,5 @@
   "feature_contract_verified": false,
   "frozen_roles_verified": false,
   "local_qualification_evidence": "",
-  "instructions": "Copy outside the packet. Complete these fields only after independent upstream qualification. CLI checks are structural and do not certify data identity or historical order. See INPUT_SCHEMAS.json and ANALYSIS_WORKFLOW.md."
+  "instructions": "Copy outside the packet. Complete these fields only after independent upstream qualification. CLI checks are structural and do not certify data identity or historical order. See INPUT_SCHEMAS.json and RUNNING.md; later interventions use INTERVENTIONS.md and INTERVENTION_QUALIFICATION.example.json."
 }

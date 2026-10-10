@@ -1,0 +1,16 @@
+{
+  "status": "INCOMPLETE_EXAMPLE_DO_NOT_USE_FOR_SCORING",
+  "modality": "MEG",
+  "scope": "USER_SUPPLIED_ADMITTED_DATA",
+  "snapshot_identity_verified": false,
+  "data_access_legal_and_license_verified": false,
+  "eligibility_verified": false,
+  "event_uid_row_order_verified": false,
+  "feature_contract_verified": false,
+  "frozen_roles_verified": false,
+  "complete_source_refits_verified": false,
+  "same_target_support_verified": false,
+  "source_LOPO_exclusion_verified": false,
+  "local_qualification_evidence": "",
+  "instructions": "Copy outside this repository. Complete only after independent qualification; Boolean and array checks are not evidence of identity or historical order. SYNTHETIC_TEST_ONLY is required for generated fixtures."
+}

@@ -1,7 +1,13 @@
 # MIC BPR core analysis code
 
-Core analysis code for **Paired perception calibration contributes to musical
-imagery decoding**.
+Core analysis code for the MIC musical-imagery perception-calibration study.
+
+The later matched label-binding, complete source-sensitivity and source-direction
+interfaces are documented in [INTERVENTIONS.md](INTERVENTIONS.md). They include
+strict donor/support matching, four-cell refits with original scoring labels,
+paired whole-person inference, complete source deletion and frozen source-only
+direction selection. These remain qualified-array stages, with raw-to-report
+gaps stated explicitly.
 
 This repository contains scientific computation functions, explicit-array command
 line interfaces, input schemas, dependency requirements and small synthetic tests.

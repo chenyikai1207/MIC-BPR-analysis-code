@@ -1,5 +1,11 @@
 # Scope and historical workflow gaps
 
+The later [intervention extension](INTERVENTIONS.md) now exposes local label-binding,
+complete source deletion, paired participant bootstrap/source sensitivity and
+source-direction formulas and CLI stages. The original table below describes
+the earlier release boundary. Cohort acquisition/materialization, instance
+manifests, complete stage scheduling and raw-to-report exports remain separate.
+
 This release prioritizes the core scientific functions. The original work used
 separate executed raw qualification, frozen manifests, processing caches and
 batch drivers. Their absence from this repository describes a packaging boundary,
